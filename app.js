@@ -9,6 +9,7 @@ const btnContainer = document.querySelector(".buttons-container");
 
 let currOperand = "";
 let previousOperand = "";
+let operation = "";
 
 //! Butonları taşıyan container için event tanımlanması
 btnContainer.addEventListener("click", (e) => {
@@ -16,18 +17,34 @@ btnContainer.addEventListener("click", (e) => {
         appendNumber(e.target.textContent);
         updateDisplay();
     }
+
+    if (e.target.classList.contains("operator")){
+        chooseOperator(e.target.textContent);
+        updateDisplay();
+    }
 });
 
 const appendNumber = (num) => {
+  //! Eger ilk olarak  0 girilmisse geri don
+  if (!currOperand && num === '0') return;
 
-    if (num === "." && currOperand.includes(".")) return;
+  //! Eğer şu anki sayi . ise ve önceki girilen sayi . iceriyorsa geri don
+  if (num === '.' && currOperand.includes('.')) return;
 
-    if ( !currOperand && num === "0") return;
+  //! Girilen sayıyı sınırladık
+  if (currOperand.length > 10) return;
 
-    currOperand = num;
-
+  //! Girilen sayilari birlestir.
+  currOperand += num;
 };
 
 const updateDisplay = () => {
-    currDisp.textContent += currOperand;
+  currDisp.textContent = currOperand;
+  prevDisp.textContent = `${previousOperand} ${operation}`;
+};
+
+const chooseOperator = (op) => {
+    operation = op;
+    previousOperand = currOperand;
+    currOperand = "";
 };
