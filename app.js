@@ -26,8 +26,13 @@ btnContainer.addEventListener("click", (e) => {
 
 const appendNumber = (num) => {
   //! Eger ilk olarak  0 girilmisse geri don
-  if (!currOperand && num === '0') return;
+  if (currOperand === "0" && num === '0') return;
 
+  if (currOperand === "0" && num !== '.'){
+    currOperand =num;
+    return;
+  }
+  
   //! Eğer şu anki sayi . ise ve önceki girilen sayi . iceriyorsa geri don
   if (num === '.' && currOperand.includes('.')) return;
 
