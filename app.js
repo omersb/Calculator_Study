@@ -44,7 +44,37 @@ const updateDisplay = () => {
 };
 
 const chooseOperator = (op) => {
+    //! ilk sayı girişinden sonraki işlemleri gerçekleştirir.
+    if (previousOperand) {
+        calculate();
+    }
+
+    //! değişken swapiing
     operation = op;
     previousOperand = currOperand;
     currOperand = "";
 };
+
+const calculate = () => {
+    let calculation = 0;
+    const prev = Number(previousOperand);
+    const current = Number(currOperand);
+
+    switch (operation) {
+        case "+":
+            calculation = prev + current;            
+            break;
+        case "-":
+            calculation = prev - current;            
+            break;
+        case "x":
+            calculation = prev * current;            
+            break;
+        case "÷":
+            calculation = prev / current;            
+            break;    
+        default:
+            break;            
+    }
+    currOperand = calculation;
+}
