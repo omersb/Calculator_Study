@@ -1,44 +1,54 @@
-//* ======================================================
+//* =================================================
 //*                     IOS CALCULATOR
-//* ======================================================
+//* =================================================
+//! Ekranlar
+const prevDisp = document.querySelector('.previous-display');
+const currDisp = document.querySelector('.current-display');
 
-const prevDisp = document.querySelector(".previous-display");
-const currDisp = document.querySelector(".current-display");
+//!Button container
+const btnContainer = document.querySelector('.buttons-container');
 
-const btnContainer = document.querySelector(".buttons-container");
+//! ara degerler icin degisken tanimlamalari
+let currOperand = '';
+let previousOperand = '';
+let operation = '';
 
-let currOperand = "";
-let previousOperand = "";
-let operation = "";
+//! Butonlari tasiyan container icin event tanimlamasi
+btnContainer.addEventListener('click', (e) => {
+  //! Herhangi bir sayi(num) sayiya tiklanildi ise
+  if (e.target.classList.contains('num')) {
+    appendNumber(e.target.textContent);
+    updateDisplay();
+  }
 
-//! Butonları taşıyan container için event tanımlanması
-btnContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("num")) {
-        appendNumber(e.target.textContent);
-        updateDisplay();
-    }
-
-    if (e.target.classList.contains("operator")){
-        chooseOperator(e.target.textContent);
-        updateDisplay();
-    }
+  //! Herhangi bir operator butonuna (+,-,x,/) tiklanildi ise
+  if (e.target.classList.contains('operator')) {
+    chooseOperator(e.target.textContent);
+    updateDisplay();
+  }
+  //! Esittir butonuna tiklanildi ise
+  if (e.target.classList.contains('equal')) {
+    calculate();
+    updateDisplay();
+  }
 });
 
 const appendNumber = (num) => {
-  //! Eger ilk olarak  0 girilmisse geri don
-  if (currOperand === "0" && num === '0') return;
+  //! Eger onceden 0 girilmisse ve tekrardan 0 girilise geri don
+  if (currOperand === '0' && num === '0') return;
 
-  if (currOperand === "0" && num !== '.'){
-    currOperand =num;
+  //! Eğer ilk olarak 0 girilmisse ve sonrasinda da . haricinde baska
+  //! bir sayi girilmis ise sadece girilen yeni sayiyi degiskene aktar.
+  //! Orn: 09 => 9 , 03 => 3 , 0.1 => 0.1
+  if (currOperand === '0' && num !== '.') {
+    currOperand = num;
     return;
   }
-  
+
   //! Eğer şu anki sayi . ise ve önceki girilen sayi . iceriyorsa geri don
   if (num === '.' && currOperand.includes('.')) return;
 
-  //! Girilen sayıyı sınırladık
   if (currOperand.length > 10) return;
-
   //! Girilen sayilari birlestir.
   currOperand += num;
 };
@@ -49,37 +59,44 @@ const updateDisplay = () => {
 };
 
 const chooseOperator = (op) => {
-    //! ilk sayı girişinden sonraki işlemleri gerçekleştirir.
-    if (previousOperand) {
-        calculate();
-    }
+  //! ilk sayi girisiinden sonraki islemleri gercekletir
+  if (previousOperand) {
+    calculate();
+  }
 
-    //! değişken swapiing
-    operation = op;
-    previousOperand = currOperand;
-    currOperand = "";
+  //! Degisken swapiing
+  operation = op;
+  previousOperand = currOperand;
+  currOperand = '';
 };
 
 const calculate = () => {
-    let calculation = 0;
-    const prev = Number(previousOperand);
-    const current = Number(currOperand);
+  let calculation = 0;
 
-    switch (operation) {
-        case "+":
-            calculation = prev + current;            
-            break;
-        case "-":
-            calculation = prev - current;            
-            break;
-        case "x":
-            calculation = prev * current;            
-            break;
-        case "÷":
-            calculation = prev / current;            
-            break;    
-        default:
-            break;            
-    }
-    currOperand = calculation;
-}
+  const prev = Number(previousOperand);
+  const current = Number(currOperand);
+
+  switch (operation) {
+    case '+':
+      calculation = prev + current;
+      break;
+    case '-':
+      calculation = prev - current;
+      break;
+    case 'x':
+      calculation = prev * current;
+      break;
+    case '÷':
+      calculation = prev / current;
+      break;
+    default:
+      return;
+  }
+
+  currOperand = calculation;
+
+  //! Esittir butonuna tiklanildiginda ekranda gozukmemesi icin
+  //! previousOperand ve operation'ı silmemiz gerekir
+  previousOperand = '';
+  operation = '';
+};
