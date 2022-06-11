@@ -7,8 +7,8 @@ const currDisp = document.querySelector(".current-display");
 
 const btnContainer = document.querySelector(".buttons-container");
 
-let currOperand = ""
-let previousOperand = ""
+let currOperand = "";
+let previousOperand = "";
 
 //! Butonları taşıyan container için event tanımlanması
 btnContainer.addEventListener("click", (e) => {
@@ -19,9 +19,15 @@ btnContainer.addEventListener("click", (e) => {
 });
 
 const appendNumber = (num) => {
-    console.log(num);
+
+    if (num === "." && currOperand.includes(".")) return;
+
+    if ( !currOperand && num === "0") return;
+
+    currOperand = num;
+
 };
 
 const updateDisplay = () => {
-    currDisp.textContent = 
+    currDisp.textContent += currOperand;
 };
